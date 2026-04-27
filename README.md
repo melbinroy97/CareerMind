@@ -129,7 +129,7 @@ Create a `.env` file in the `client/` directory:
 VITE_API_BASE_URL=http://localhost:2000/api
 ```
 
-### Run Locally
+### Run Locally (Manual)
 
 ```bash
 # Terminal 1 — Start backend
@@ -142,6 +142,41 @@ npm run dev
 ```
 
 Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+### Run Locally (Docker)
+
+The application is fully containerized for a production-like local environment.
+
+```bash
+# Build and start all services (Frontend, Backend, MongoDB)
+docker-compose up --build
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## 🏗️ DevOps Architecture & CI/CD
+
+CareerMinds is equipped with a production-grade DevOps pipeline:
+
+### Dockerization
+- **Frontend Container**: Multi-stage build using Vite and Nginx to serve static files. Nginx proxies `/api` requests to the backend container.
+- **Backend Container**: Node.js 18 running as a non-root user (`node`) for enhanced security.
+- **MongoDB**: Persisted via Docker volume with built-in healthchecks.
+- **Orchestration**: `docker-compose.yml` ties all services together on a custom network.
+
+### Security Hardening
+- **Helmet**: Sets secure HTTP headers.
+- **Rate Limiting**: Global limit (2000 req/15min) and strict limits on `/api/auth/*` (10 req/15min).
+- **CORS**: Strictly configured using the `ALLOWED_ORIGINS` environment variable.
+- **Morgan**: Detailed request logging in development.
+
+### CI/CD Pipeline (GitHub Actions)
+Located in `.github/workflows/ci.yml`, the pipeline runs on every push to `main`:
+1. **Test Job**: Checks out code, sets up Node.js with caching, installs dependencies, and tests the Vite build.
+2. **Docker Build Job**: Verifies that both Frontend and Backend Docker images build successfully without errors.
+3. **Deploy Job**: Triggers a webhook deployment (e.g., Render) if the branch is `main`.
 
 ---
 

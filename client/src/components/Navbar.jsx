@@ -63,7 +63,7 @@ export default function Navbar() {
                     setActiveLink(item.href);
                   } else if (item.href.includes("#")) {
                     setActiveLink(item.href);
-                  } else {
+                  } else { //externallinks
                     setActiveLink(item.href);
                   }
                 }}

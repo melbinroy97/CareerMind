@@ -57,7 +57,7 @@ export default function CompleteProfile() {
     setError("");
 
     try {
-      await API.put("/user/complete-profile", {
+      await API.put("/users/complete-profile", {
         interests: formData.interests.split(",").map((s) => s.trim()),
         strengths: formData.strengths,
         mindsetType: formData.mindsetType,
@@ -139,8 +139,8 @@ export default function CompleteProfile() {
                   type="button"
                   onClick={() => toggleSelection("strengths", strength)}
                   className={`px-6 py-3 rounded-full font-medium transition-all duration-200 border-2 ${formData.strengths.includes(strength)
-                      ? "border-blue-500 bg-blue-50 text-blue-700 scale-105 shadow-md shadow-blue-500/10"
-                      : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
+                    ? "border-blue-500 bg-blue-50 text-blue-700 scale-105 shadow-md shadow-blue-500/10"
+                    : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"
                     }`}
                 >
                   {strength}
@@ -165,8 +165,8 @@ export default function CompleteProfile() {
                   type="button"
                   onClick={() => setFormData({ ...formData, mindsetType: mindset.id })}
                   className={`flex items-center gap-4 p-5 rounded-2xl text-left transition-all duration-200 border-2 ${formData.mindsetType === mindset.id
-                      ? "border-emerald-500 bg-emerald-50 scale-[1.02] shadow-emerald-500/10 shadow-lg"
-                      : "border-slate-100 bg-white hover:border-slate-200 hover:bg-slate-50"
+                    ? "border-emerald-500 bg-emerald-50 scale-[1.02] shadow-emerald-500/10 shadow-lg"
+                    : "border-slate-100 bg-white hover:border-slate-200 hover:bg-slate-50"
                     }`}
                 >
                   <div className="text-3xl bg-white w-12 h-12 flex items-center justify-center rounded-xl shadow-sm">{mindset.icon}</div>
@@ -195,8 +195,8 @@ export default function CompleteProfile() {
                   type="button"
                   onClick={() => toggleSelection("aspirations", aspiration.id)}
                   className={`p-5 rounded-2xl text-left transition-all duration-200 border-2 ${formData.aspirations.includes(aspiration.id)
-                      ? "border-purple-500 bg-purple-50 scale-[1.02] shadow-purple-500/10 shadow-lg"
-                      : "border-slate-100 bg-white hover:border-slate-200 hover:bg-slate-50"
+                    ? "border-purple-500 bg-purple-50 scale-[1.02] shadow-purple-500/10 shadow-lg"
+                    : "border-slate-100 bg-white hover:border-slate-200 hover:bg-slate-50"
                     }`}
                 >
                   <h4 className={`text-lg font-bold ${formData.aspirations.includes(aspiration.id) ? "text-purple-700" : "text-slate-800"}`}>{aspiration.label}</h4>

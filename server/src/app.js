@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import morgan from "morgan";
 import authRoutes from "./routes/authRoutes.js";
 import testRoutes from "./routes/testRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -39,6 +40,11 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
+// Logging (development mode)
+if (process.env.NODE_ENV !== "production") {
+  app.use(morgan("dev"));
+}
+
 
 // Rate Limiting
 const limiter = rateLimit({
@@ -47,11 +53,18 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
+// Specific rate limit for auth routes
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // Limit each IP to 10 requests per `window`
+  message: "Too many login attempts from this IP, please try again after 15 minutes."
+});
+
 // Body Parser
 app.use(express.json());
-app.use("/api/auth", authRoutes);
+app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/test", testRoutes);
-app.use("/api/user", userRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/assessment", assessmentRoutes);
 app.use("/api/roadmap", roadmapRoutes);
 app.use("/api/dashboard", dashboardRoutes);
