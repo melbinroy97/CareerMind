@@ -17,6 +17,8 @@ import errorHandler from "./middlewares/errorMiddleware.js";
 
 const app = express();
 
+// Trust the reverse proxy (e.g., Render) for accurate IP rate limiting
+app.set("trust proxy", 1);
 // CORS - must be before helmet
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',')
