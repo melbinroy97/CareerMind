@@ -1,28 +1,21 @@
-import nodemailer from "nodemailer";
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendEmail = async (options) => {
     try {
-        const transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 465,
-            secure: true,
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
-            },
-        });
-
-        const mailOptions = {
-            from: `"CareerMinds" <${process.env.EMAIL_USER}>`,
+        const data = await resend.emails.send({
+            // Note: If you don't have a verified custom domain on Resend, 
+            // you must use 'onboarding@resend.dev' and can only send emails to yourself.
+            from: 'CareerMinds <onboarding@resend.dev>', 
             to: options.email,
             subject: options.subject,
             html: options.html,
-        };
+        });
 
-        const info = await transporter.sendMail(mailOptions);
-        console.log("Email sent: " + info.response);
+        console.log("Email sent successfully via Resend");
     } catch (error) {
-        console.error("Error sending email:", error);
+        console.error("Error sending email via Resend:", error);
     }
 };
 
